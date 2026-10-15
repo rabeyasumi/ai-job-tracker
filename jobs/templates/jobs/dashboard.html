@@ -1,0 +1,110 @@
+ <!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Job Application Tracker</title>
+    title>AI Job Analysis</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'jobs/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Job Application Tracker</h1>
+
+<p>Welcome, {{ request.user.username }}!</p>
+<nav>
+<a href="{% url 'dashboard' %}">Dashboard</a>
+|
+<a href="{% url 'application_list' %}">All Applications</a>
+|
+<a href="{% url 'application_create' %}">Add Application</a>
+</nav>
+<form method="post" action="{% url 'logout' %}">
+{% csrf_token %}
+<button type="submit">Logout</button>
+</form>
+</header>
+<hr>
+<main>
+<section>
+<h2>Overview</h2>
+<div>
+<h3>Total Applications</h3>
+<p>{{ total_applications }}</p>
+</div>
+</section>
+<hr>
+<section>
+<h2>Applications by Status</h2>
+{% for item in status_statistics %}
+<div>
+<strong>{{ item.label }}</strong>
+<span>{{ item.count }}</span>
+</div>
+{% empty %}
+<p>No status statistics available.</p>
+{% endfor %}
+</section>
+<hr>
+<section>
+<h2>Recent Applications</h2>
+{% for application in recent_applications %}
+<article>
+<h3>
+<a href="{% url 'application_detail' application.pk %}">
+{{ application.job_title }}
+</a>
+</h3>
+<p>Company: {{ application.company_name }}</p>
+<p>Status: {{ application.get_status_display }}</p>
+<p>Application Date: {{ application.application_date }}</p>
+</article>
+<hr>
+{% empty %}
+<p>You haven't added any job applications yet.</p>
+<a href="{% url 'application_create' %}">
+Add your first application
+</a>
+{% endfor %}
+<a href="{% url 'application_list' %}">
+View All Applications
+</a>
+</section>
+<hr>
+<section>
+    <h2>Upcoming Interviews</h2>
+
+    {% for interview in upcoming_interviews %}
+        <article>
+            <h3>{{ interview.application.job_title }}</h3>
+
+            <p>Company: {{ interview.application.company_name }}</p>
+            <p>Date & Time: {{ interview.interview_date }}</p>
+            <p>Type: {{ interview.get_interview_type_display }}</p>
+
+            {% if interview.meeting_link %}
+                <a href="{{ interview.meeting_link }}"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    Join Meeting
+                </a>
+            {% endif %}
+
+            <p>
+                <a href="{% url 'interview_update' interview.pk %}">
+                    Edit Interview
+                </a>
+            </p>
+        </article>
+        <hr>
+    {% empty %}
+        <p>No upcoming interviews scheduled.</p>
+    {% endfor %}
+
+    <a href="{% url 'interview_list' %}">View All Interviews</a>
+</section>
+</main>
+</body>
+</html>

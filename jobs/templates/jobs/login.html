@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    title>AI Job Analysis</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'jobs/style.css' %}">
+</head>
+<body>
+    <h1>Login to Job Tracker</h1>
+
+    {% if form.errors %}
+        <p>Username or password is incorrect. Please try again.</p>
+    {% endif %}
+
+    {% if next %}
+        <p>Please log in to access that page.</p>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p>
+        Don't have an account?
+        <a href="{% url 'register' %}">Register</a>
+    </p>
+</body>
+</html>

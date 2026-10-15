@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Job Analysis</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'jobs/style.css' %}">
+</head>
+<body>
+    <h1>AI Job Description Analysis</h1>
+
+    <h2>{{ application.job_title }}</h2>
+    <p>Company: {{ application.company_name }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Analyze Job Description</button>
+    </form>
+
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+
+    {% if analysis %}
+        <h2>Analysis Result</h2>
+        <div style="white-space: pre-wrap;">{{ analysis }}</div>
+    {% endif %}
+
+    <p>
+        <a href="{% url 'application_detail' application.pk %}">
+            Back to Application
+        </a>
+    </p>
+</body>
+</html>

@@ -40,4 +40,35 @@ class JobApplication(models.Model):
 
     def __str__(self):
         return f"{self.job_title} - {self.company_name}"
+class Interview(models.Model):
+    INTERVIEW_TYPES = [
+        ('phone', 'Phone Interview'),
+        ('online', 'Online Interview'),
+        ('onsite', 'On-site Interview'),
+        ('technical', 'Technical Interview'),
+        ('hr', 'HR Interview'),
+        ('other', 'Other'),
+    ]
 
+    application = models.ForeignKey(
+        JobApplication,
+        on_delete=models.CASCADE,
+        related_name='interviews'
+    )
+
+    interview_date = models.DateTimeField()
+    interview_type = models.CharField(
+        max_length=20,
+        choices=INTERVIEW_TYPES,
+        default='online'
+    )
+
+    location = models.CharField(max_length=255, blank=True)
+    meeting_link = models.URLField(blank=True)
+    notes = models.TextField(blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.application.job_title} - {self.interview_date:%Y-%m-%d %H:%M}"

@@ -1,0 +1,143 @@
+
+/* Basic page design */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    color: #333;
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+/* Headings */
+h1 {
+    color: #234b70;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #345b7d;
+    margin-top: 25px;
+}
+
+h3 {
+    margin-bottom: 8px;
+}
+
+/* Sections and job cards */
+header,
+section,
+article,
+main > form,
+body > form,
+body > p,
+body > h1,
+body > h2 {
+    margin-bottom: 18px;
+}
+
+article,
+section {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 18px;
+    margin-bottom: 15px;
+}
+
+/* Forms */
+form {
+    margin: 15px 0;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+input,
+select,
+textarea {
+    padding: 9px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    max-width: 100%;
+    box-sizing: border-box;
+    font: inherit;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="url"],
+input[type="date"],
+input[type="datetime-local"],
+textarea,
+select {
+    width: 100%;
+}
+
+textarea {
+    min-height: 100px;
+}
+
+/* Buttons */
+button {
+    background-color: #315f86;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+button:hover {
+    background-color: #234765;
+}
+
+/* Links */
+a {
+    color: #2469a0;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Horizontal lines */
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
+}
+
+/* Form paragraphs */
+form p {
+    margin-bottom: 15px;
+}
+
+/* AI analysis result */
+.analysis-result {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    white-space: pre-wrap;
+}
+
+/* Small screens */
+@media (max-width: 600px) {
+    body {
+        margin: 10px auto;
+        padding: 12px;
+    }
+
+    article,
+    section {
+        padding: 12px;
+    }
+}

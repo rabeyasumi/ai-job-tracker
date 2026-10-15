@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ application.job_title }}</title>
+    title>AI Job Analysis</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'jobs/style.css' %}">
+</head>
+<body>
+    <h1>{{ application.job_title }}</h1>
+
+    <p><strong>Company:</strong> {{ application.company_name }}</p>
+    <p><strong>Description:</strong> {{ application.job_description|default:"Not provided" }}</p>
+    <p><strong>Location:</strong> {{ application.location|default:"Not specified" }}</p>
+    <p><strong>Salary:</strong> {{ application.salary|default:"Not specified" }}</p>
+    <p><strong>Application Date:</strong> {{ application.application_date }}</p>
+    <p><strong>Status:</strong> {{ application.get_status_display }}</p>
+    <p><strong>Notes:</strong> {{ application.notes|default:"No notes" }}</p>
+
+    {% if application.job_url %}
+        <p>
+            <a href="{{ application.job_url }}" target="_blank" rel="noopener noreferrer">
+                View Original Job Posting
+            </a>
+        </p>
+    {% endif %}
+
+    <a href="{% url 'application_update' application.pk %}">
+        Edit Application
+    </a>
+
+    <a href="{% url 'interview_create' application.pk %}">
+        Schedule Interview
+    </a>
+
+    <p>
+        <a href="{% url 'analyze_application' application.pk %}">
+            Analyze Job Description with AI
+        </a>
+    </p>
+
+    <p>
+        <a href="{% url 'application_delete' application.pk %}">
+            Delete Application
+        </a>
+    </p>
+
+
+    <p>
+        <a href="{% url 'application_list' %}">
+            Back to Applications
+        </a>
+    </p>
+</body>
+</html>
