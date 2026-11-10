@@ -4,7 +4,6 @@ A Django-based web application that helps users manage and track their job appli
 
 ## YouTube Live Demo
 
-▶️ [Watch the project demo on YouTube](https://www.youtube.com/watch?v=ad2zEBUP2eQ)
 
 ## Features
 
