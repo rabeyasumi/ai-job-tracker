@@ -2,8 +2,6 @@
 
 A Django-based web application that helps users manage and track their job applications from one place. Users can organize applications, monitor their status, schedule interviews, and analyze job descriptions with AI.
 
-## YouTube Live Demo
-
 
 ## Features
 
