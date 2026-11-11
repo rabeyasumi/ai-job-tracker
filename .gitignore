@@ -18,3 +18,8 @@ media/
 db.sqlite3
 .DS_Store
 **/ .DS_Store
+venv/
+bin/
+lib/
+lib64/
+db.sqlite3
