@@ -4,26 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ page_title }} | Job Tracker</title>
-    title>AI Job Analysis</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'jobs/style.css' %}">
 </head>
-<body>
-    <h1>{{ page_title }}</h1>
+<body class="bg-container">
 
-    <p>
-        Job: {{ application.job_title }} at {{ application.company_name }}
-    </p>
+    <div class="card-container form-card">
+        <!-- Header Section -->
+        <header class="page-header">
+            <h1 class="main-title">{{ page_title }}</h1>
+            {% if application %}
+                <p class="subtitle">
+                    For <strong>{{ application.job_title }}</strong> at <strong>{{ application.company_name }}</strong>
+                </p>
+            {% endif %}
+        </header>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
+        <!-- Form Section -->
+        <form method="post" class="job-form">
+            {% csrf_token %}
 
-        <button type="submit">Save Interview</button>
-    </form>
+            <!-- Non-field Errors (if any) -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-error">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
 
-    <p>
-        <a href="{% url 'interview_list' %}">Back to Interviews</a>
-    </p>
+            <!-- Render Form Fields with Custom Wrapper -->
+            <div class="form-fields-wrapper">
+                {{ form.as_p }}
+            </div>
+
+            <!-- Form Action Buttons -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    💾 Save Interview
+                </button>
+                <a href="{% url 'interview_list' %}" class="btn btn-secondary">
+                    Cancel
+                </a>
+            </div>
+        </form>
+
+        <!-- Footer Back Link -->
+        <footer class="card-footer">
+            <a href="{% url 'interview_list' %}" class="btn-back">
+                ← Back to Interviews
+            </a>
+        </footer>
+    </div>
+
 </body>
 </html>

@@ -3,105 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Job Applications</title>
-    title>AI Job Analysis</title>
+    <title>My Job Applications - Job Tracker</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'jobs/style.css' %}">
 </head>
-<body>
-    <h1>My Job Applications</h1>
+<body class="bg-container">
 
-    <p>Logged in as: {{ request.user.username }}</p>
+    <div class="card-container dashboard-card">
+        <!-- Top Navigation Bar / Header -->
+        <header class="dashboard-header">
+            <div class="user-welcome">
+                <span class="user-avatar">👤</span>
+                <div>
+                    <h1 class="main-title">My Job Applications</h1>
+                    <p class="subtitle">Logged in as <strong>{{ request.user.username }}</strong></p>
+                </div>
+            </div>
 
-    <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">Logout</button>
-    </form>
-
-    <p>
-        <a href="{% url 'application_create' %}">
-            + Add Job Application
-        </a>
-    </p>
-
-    <h2>Search & Filter</h2>
-
-    <form method="get">
-        <p>
-            <label for="q">Job title or company:</label>
-            <input
-                type="text"
-                id="q"
-                name="q"
-                value="{{ query }}"
-                placeholder="Search jobs..."
-            >
-        </p>
-
-        <p>
-            <label for="status">Status:</label>
-            <select id="status" name="status">
-                <option value="">All statuses</option>
-
-                {% for value, label in status_choices %}
-                    <option
-                        value="{{ value }}"
-                        {% if selected_status == value %}selected{% endif %}
-                    >
-                        {{ label }}
-                    </option>
-                {% endfor %}
-            </select>
-        </p>
-
-        <p>
-            <label for="location">Location:</label>
-            <input
-                type="text"
-                id="location"
-                name="location"
-                value="{{ location_query }}"
-                placeholder="e.g. Dhaka"
-            >
-        </p>
-
-        <button type="submit">Apply Filters</button>
-        <a href="{% url 'application_list' %}">Clear Filters</a>
-    </form>
-
-    <hr>
-
-    <h2>Applications ({{ applications|length }})</h2>
-
-    {% for application in applications %}
-        <article>
-            <h3>
-                <a href="{% url 'application_detail' application.pk %}">
-                    {{ application.job_title }}
+            <div class="header-actions">
+                <a href="{% url 'application_create' %}" class="btn btn-primary">
+                    + Add Application
                 </a>
-            </h3>
+                <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-secondary-outline">Logout</button>
+                </form>
+            </div>
+        </header>
 
-            <p>Company: {{ application.company_name }}</p>
-            <p>Location: {{ application.location|default:"Not specified" }}</p>
-            <p>Status: {{ application.get_status_display }}</p>
-            <p>Application Date: {{ application.application_date }}</p>
+        <!-- Search & Filter Section -->
+        <section class="filter-section">
+            <h2 class="section-subtitle">Search & Filter</h2>
+            <form method="get" class="filter-form">
+                <div class="filter-grid">
+                    <div class="filter-field">
+                        <label for="q">Job title or company</label>
+                        <input
+                            type="text"
+                            id="q"
+                            name="q"
+                            value="{{ query }}"
+                            placeholder="Search jobs..."
+                        >
+                    </div>
 
-            <a href="{% url 'application_update' application.pk %}">
-                Edit
-            </a>
+                    <div class="filter-field">
+                        <label for="status">Status</label>
+                        <select id="status" name="status">
+                            <option value="">All statuses</option>
+                            {% for value, label in status_choices %}
+                                <option
+                                    value="{{ value }}"
+                                    {% if selected_status == value %}selected{% endif %}
+                                >
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-            |
+                    <div class="filter-field">
+                        <label for="location">Location</label>
+                        <input
+                            type="text"
+                            id="location"
+                            name="location"
+                            value="{{ location_query }}"
+                            placeholder="e.g. Dhaka"
+                        >
+                    </div>
+                </div>
 
-            <a href="{% url 'application_delete' application.pk %}">
-                Delete
-            </a>
-        </article>
+                <div class="filter-actions">
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                    <a href="{% url 'application_list' %}" class="btn-clear">Clear Filters</a>
+                </div>
+            </form>
+        </section>
 
-        <hr>
-    {% empty %}
-        <p>No matching applications found.</p>
-        <p>Try changing your search or filters.</p>
-    {% endfor %}
+        <hr class="divider">
+
+        <!-- Applications List Section -->
+        <section class="applications-section">
+            <div class="section-header-row">
+                <h2 class="section-subtitle">Applications ({{ applications|length }})</h2>
+            </div>
+
+            {% if applications %}
+                <div class="applications-grid">
+                    {% for application in applications %}
+                        <article class="job-card-item">
+                            <div class="job-card-top">
+                                <h3>
+                                    <a href="{% url 'application_detail' application.pk %}" class="job-card-title">
+                                        {{ application.job_title }}
+                                    </a>
+                                </h3>
+                                <span class="status-badge status-{{ application.status|slugify }}">
+                                    {{ application.get_status_display }}
+                                </span>
+                            </div>
+
+                            <div class="job-card-body">
+                                <p class="company">🏢 {{ application.company_name }}</p>
+                                <p class="location">📍 {{ application.location|default:"Location not specified" }}</p>
+                                <p class="date">📅 Applied: {{ application.application_date }}</p>
+                            </div>
+
+                            <div class="job-card-footer">
+                                <a href="{% url 'application_update' application.pk %}" class="card-action-link edit">
+                                    Edit
+                                </a>
+                                <a href="{% url 'application_delete' application.pk %}" class="card-action-link delete">
+                                    Delete
+                                </a>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p class="empty-icon">📂</p>
+                    <p class="empty-title">No matching applications found.</p>
+                    <p class="empty-subtitle">Try changing your search keywords or clear your filters.</p>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+
 </body>
 </html>
-

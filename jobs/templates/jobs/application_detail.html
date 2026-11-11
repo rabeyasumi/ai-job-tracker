@@ -1,58 +1,87 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ application.job_title }}</title>
-    title>AI Job Analysis</title>
+    <title>{{ application.job_title }} - Application Details</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'jobs/style.css' %}">
 </head>
-<body>
-    <h1>{{ application.job_title }}</h1>
+<body class="bg-container">
 
-    <p><strong>Company:</strong> {{ application.company_name }}</p>
-    <p><strong>Description:</strong> {{ application.job_description|default:"Not provided" }}</p>
-    <p><strong>Location:</strong> {{ application.location|default:"Not specified" }}</p>
-    <p><strong>Salary:</strong> {{ application.salary|default:"Not specified" }}</p>
-    <p><strong>Application Date:</strong> {{ application.application_date }}</p>
-    <p><strong>Status:</strong> {{ application.get_status_display }}</p>
-    <p><strong>Notes:</strong> {{ application.notes|default:"No notes" }}</p>
+    <div class="card-container detail-card">
+        <!-- Header & Status -->
+        <header class="detail-header">
+            <div>
+                <h1 class="main-title">{{ application.job_title }}</h1>
+                <p class="company-name">Company: <span>{{ application.company_name }}</span></p>
+            </div>
+            <div class="status-badge status-{{ application.status|slugify }}">
+                {{ application.get_status_display }}
+            </div>
+        </header>
 
-    {% if application.job_url %}
-        <p>
-            <a href="{{ application.job_url }}" target="_blank" rel="noopener noreferrer">
-                View Original Job Posting
+        <!-- Main Info Grid -->
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">Location</span>
+                <span class="info-value">{{ application.location|default:"Not specified" }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Salary</span>
+                <span class="info-value">{{ application.salary|default:"Not specified" }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Application Date</span>
+                <span class="info-value">{{ application.application_date }}</span>
+            </div>
+            {% if application.job_url %}
+            <div class="info-item">
+                <span class="info-label">Job Posting</span>
+                <span class="info-value">
+                    <a href="{{ application.job_url }}" target="_blank" rel="noopener noreferrer" class="external-link">
+                        View Original Posting →
+                    </a>
+                </span>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Description Box -->
+        <div class="content-section">
+            <h3 class="section-subtitle">Job Description</h3>
+            <div class="text-box pre-wrap">{{ application.job_description|default:"Not provided" }}</div>
+        </div>
+
+        <!-- Notes Box -->
+        <div class="content-section">
+            <h3 class="section-subtitle">Notes</h3>
+            <div class="text-box pre-wrap">{{ application.notes|default:"No notes added yet." }}</div>
+        </div>
+
+        <!-- Action Buttons Grid -->
+        <div class="actions-grid">
+            <a href="{% url 'application_update' application.pk %}" class="btn btn-secondary">
+                ✏️ Edit Application
             </a>
-        </p>
-    {% endif %}
+            <a href="{% url 'interview_create' application.pk %}" class="btn btn-primary">
+                📅 Schedule Interview
+            </a>
+            <a href="{% url 'analyze_application' application.pk %}" class="btn btn-accent">
+                ✨ Analyze with AI
+            </a>
+            <a href="{% url 'application_delete' application.pk %}" class="btn btn-danger-outline">
+                🗑️ Delete
+            </a>
+        </div>
 
-    <a href="{% url 'application_update' application.pk %}">
-        Edit Application
-    </a>
+        <!-- Footer Back Link -->
+        <footer class="card-footer">
+            <a href="{% url 'application_list' %}" class="btn-back">
+                ← Back to Applications
+            </a>
+        </footer>
+    </div>
 
-    <a href="{% url 'interview_create' application.pk %}">
-        Schedule Interview
-    </a>
-
-    <p>
-        <a href="{% url 'analyze_application' application.pk %}">
-            Analyze Job Description with AI
-        </a>
-    </p>
-
-    <p>
-        <a href="{% url 'application_delete' application.pk %}">
-            Delete Application
-        </a>
-    </p>
-
-
-    <p>
-        <a href="{% url 'application_list' %}">
-            Back to Applications
-        </a>
-    </p>
 </body>
 </html>

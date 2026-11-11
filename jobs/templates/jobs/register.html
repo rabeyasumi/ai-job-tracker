@@ -1,27 +1,50 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account</title>
-    title>AI Job Analysis</title>
+    <title>Create Account | Job Tracker</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'jobs/style.css' %}">
 </head>
-<body>
-    <h1>Create Your Account</h1>
+<body class="bg-container">
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
+    <div class="card-container auth-card">
+        <!-- Header Section -->
+        <header class="page-header text-center">
+            <div class="auth-icon">🚀</div>
+            <h1 class="main-title">Create Your Account</h1>
+            <p class="subtitle">Start tracking your job applications today</p>
+        </header>
 
-        <button type="submit">Register</button>
-    </form>
+        <!-- Form Section -->
+        <form method="post" class="job-form">
+            {% csrf_token %}
 
-    <p>
-        Already have an account?
-        <a href="{% url 'login' %}">Login</a>
-    </p>
+            <!-- Non-field Errors (if any) -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-error">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="form-fields-wrapper">
+                {{ form.as_p }}
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+                Register
+            </button>
+        </form>
+
+        <!-- Footer Link Section -->
+        <footer class="card-footer text-center">
+            <p class="auth-footer-text">
+                Already have an account? 
+                <a href="{% url 'login' %}" class="auth-link">Login</a>
+            </p>
+        </footer>
+    </div>
+
 </body>
 </html>

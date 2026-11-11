@@ -3,29 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirm Delete</title>
-    title>AI Job Analysis</title>
+    <title>Confirm Delete - {{ application.job_title }}</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'jobs/style.css' %}">
 </head>
-<body>
-    <h1>Delete Job Application?</h1>
+<body class="bg-container">
 
-    <p>
-        Are you sure you want to delete
-        <strong>{{ application.job_title }}</strong>
-        at {{ application.company_name }}?
-    </p>
+    <div class="card-container delete-card">
+        <!-- Warning Header -->
+        <div class="delete-header">
+            <div class="warning-icon">⚠️</div>
+            <h1 class="main-title">Delete Job Application?</h1>
+        </div>
 
-    <p>This action cannot be undone.</p>
+        <!-- Warning Message -->
+        <div class="delete-content">
+            <p class="warning-text">
+                Are you sure you want to delete 
+                <strong>{{ application.job_title }}</strong> 
+                at <strong>{{ application.company_name }}</strong>?
+            </p>
+            <p class="sub-warning">This action cannot be undone and will permanently remove this record.</p>
+        </div>
 
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Yes, Delete</button>
-    </form>
+        <!-- Action Form & Cancel -->
+        <form method="post" class="delete-form-actions">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">
+                Yes, Delete
+            </button>
+            <a href="{% url 'application_detail' application.pk %}" class="btn btn-secondary">
+                Cancel
+            </a>
+        </form>
+    </div>
 
-    <a href="{% url 'application_detail' application.pk %}">
-        Cancel
-    </a>
 </body>
 </html>

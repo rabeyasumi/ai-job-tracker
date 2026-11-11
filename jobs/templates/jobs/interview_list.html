@@ -4,49 +4,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Interviews | Job Tracker</title>
-    title>AI Job Analysis</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'jobs/style.css' %}">
 </head>
-<body>
-    <h1>My Interviews</h1>
+<body class="bg-container">
 
-    <p>
-        <a href="{% url 'dashboard' %}">Dashboard</a> |
-        <a href="{% url 'application_list' %}">Applications</a>
-    </p>
+    <div class="card-container dashboard-card">
+        <!-- Top Navigation Bar / Header -->
+        <header class="dashboard-header">
+            <div class="user-welcome">
+                <span class="user-avatar">🎙️</span>
+                <div>
+                    <h1 class="main-title">My Interviews</h1>
+                    <p class="subtitle">Track and manage your upcoming & past interviews</p>
+                </div>
+            </div>
 
-    {% for interview in interviews %}
-        <article>
-            <h2>{{ interview.application.job_title }}</h2>
+            <div class="header-actions">
+                <nav class="nav-links">
+                    <a href="{% url 'dashboard' %}" class="nav-item">Dashboard</a>
+                    <a href="{% url 'application_list' %}" class="nav-item">Applications</a>
+                    <a href="{% url 'interview_list' %}" class="nav-item active">Interviews</a>
+                </nav>
+            </div>
+        </header>
 
-            <p>Company: {{ interview.application.company_name }}</p>
-            <p>Date & Time: {{ interview.interview_date }}</p>
-            <p>Type: {{ interview.get_interview_type_display }}</p>
+        <!-- Interviews List Section -->
+        <section class="applications-section">
+            <div class="section-header-row">
+                <h2 class="section-subtitle">Scheduled Interviews ({{ interviews|length }})</h2>
+            </div>
 
-            {% if interview.location %}
-                <p>Location: {{ interview.location }}</p>
+            {% if interviews %}
+                <div class="applications-grid">
+                    {% for interview in interviews %}
+                        <article class="job-card-item interview-card-item">
+                            <div class="job-card-top">
+                                <h3 class="job-card-title">{{ interview.application.job_title }}</h3>
+                                <span class="type-badge">{{ interview.get_interview_type_display }}</span>
+                            </div>
+
+                            <div class="job-card-body">
+                                <p class="company">🏢 <strong>Company:</strong> {{ interview.application.company_name }}</p>
+                                <p class="date">📅 <strong>Date & Time:</strong> {{ interview.interview_date }}</p>
+                                
+                                {% if interview.location %}
+                                    <p class="location">📍 <strong>Location:</strong> {{ interview.location }}</p>
+                                {% endif %}
+
+                                {% if interview.notes %}
+                                    <div class="interview-notes-box">
+                                        <strong>Notes:</strong> {{ interview.notes }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="interview-card-actions">
+                                {% if interview.meeting_link %}
+                                    <a href="{{ interview.meeting_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-accent-sm">
+                                        🎥 Join Meeting
+                                    </a>
+                                {% endif %}
+                                <div class="action-links-right">
+                                    <a href="{% url 'interview_update' interview.pk %}" class="card-action-link edit">
+                                        Edit
+                                    </a>
+                                    <span class="separator">|</span>
+                                    <a href="{% url 'interview_delete' interview.pk %}" class="card-action-link delete">
+                                        Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p class="empty-icon">📅</p>
+                    <p class="empty-title">No interviews scheduled yet.</p>
+                    <p class="empty-subtitle">Schedule an interview directly from any of your job application details page.</p>
+                </div>
             {% endif %}
+        </section>
 
-            {% if interview.meeting_link %}
-                <p>
-                    Meeting link:
-                    <a href="{{ interview.meeting_link }}" target="_blank"
-                       rel="noopener noreferrer">Join Meeting</a>
-                </p>
-            {% endif %}
+        <!-- Footer Back Link -->
+        <footer class="card-footer">
+            <a href="{% url 'dashboard' %}" class="btn-back">
+                ← Back to Dashboard
+            </a>
+        </footer>
+    </div>
 
-            {% if interview.notes %}
-                <p>Notes: {{ interview.notes }}</p>
-            {% endif %}
-
-            <a href="{% url 'interview_update' interview.pk %}">Edit</a>
-            |
-            <a href="{% url 'interview_delete' interview.pk %}">Delete</a>
-        </article>
-        <hr>
-    {% empty %}
-        <p>No interviews scheduled yet.</p>
-    {% endfor %}
 </body>
 </html>

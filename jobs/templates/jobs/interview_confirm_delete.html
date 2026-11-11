@@ -2,24 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Delete Interview</title>
-    title>AI Job Analysis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Interview - {{ interview.application.job_title }}</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'jobs/style.css' %}">
 </head>
-<body>
-    <h1>Delete Interview</h1>
+<body class="bg-container">
 
-    <p>
-        Are you sure you want to delete the interview for
-        {{ interview.application.job_title }} at
-        {{ interview.application.company_name }}?
-    </p>
+    <div class="card-container delete-card">
+        <!-- Warning Header -->
+        <div class="delete-header">
+            <div class="warning-icon">⚠️</div>
+            <h1 class="main-title">Delete Interview?</h1>
+        </div>
 
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Yes, Delete</button>
-        <a href="{% url 'interview_list' %}">Cancel</a>
-    </form>
+        <!-- Warning Message -->
+        <div class="delete-content">
+            <p class="warning-text">
+                Are you sure you want to delete the interview for 
+                <strong>{{ interview.application.job_title }}</strong> 
+                at <strong>{{ interview.application.company_name }}</strong>?
+            </p>
+            <p class="sub-warning">This action cannot be undone and will permanently remove this schedule.</p>
+        </div>
+
+        <!-- Action Form & Cancel -->
+        <form method="post" class="delete-form-actions">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">
+                Yes, Delete
+            </button>
+            <a href="{% url 'interview_list' %}" class="btn btn-secondary">
+                Cancel
+            </a>
+        </form>
+    </div>
+
 </body>
 </html>

@@ -3,34 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Job Analysis</title>
+    <title>AI Job Analysis - {{ application.job_title }}</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'jobs/style.css' %}">
 </head>
-<body>
-    <h1>AI Job Description Analysis</h1>
+<body class="bg-container">
 
-    <h2>{{ application.job_title }}</h2>
-    <p>Company: {{ application.company_name }}</p>
+    <div class="card-container">
+        <!-- Header Section -->
+        <header class="page-header">
+            <h1 class="main-title">AI Job Description Analysis</h1>
+            <div class="job-info">
+                <h2 class="job-title">{{ application.job_title }}</h2>
+                <p class="company-name">Company: <span>{{ application.company_name }}</span></p>
+            </div>
+        </header>
 
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Analyze Job Description</button>
-    </form>
+        <!-- Profile Input Form -->
+        <form method="post" class="analysis-form">
+            {% csrf_token %}
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label for="user_profile" style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Your Skills & Experience Profile:</label>
+                <textarea name="user_profile" id="user_profile" rows="4" class="form-control" placeholder="e.g. Python, Django, PostgreSQL, Git, 1.5 years experience..." required>{{ user_profile|default:"" }}</textarea>
+            </div>
 
-    {% if error %}
-        <p>{{ error }}</p>
-    {% endif %}
+            <button type="submit" class="btn btn-primary">
+                ✨ Analyze & Compare with AI
+            </button>
+        </form>
 
-    {% if analysis %}
-        <h2>Analysis Result</h2>
-        <div style="white-space: pre-wrap;">{{ analysis }}</div>
-    {% endif %}
+        <!-- Error Alert -->
+        {% if error %}
+            <div class="alert alert-error">
+                <span class="alert-icon">⚠️</span>
+                <p>{{ error }}</p>
+            </div>
+        {% endif %}
 
-    <p>
-        <a href="{% url 'application_detail' application.pk %}">
-            Back to Application
-        </a>
-    </p>
+        <!-- 🚀 EKHANEI APNAR DEWA CODE-TI BOSHABE (AI ANALYSIS RESULTS) -->
+        {% if analysis %}
+            <div class="skill-comparison-card">
+                <div class="comparison-header">
+                    <h2 class="section-title">⚡ AI Skill Match & Comparison</h2>
+                    <p class="subtitle">AI-powered evaluation comparing job requirements with your profile.</p>
+                </div>
+
+                <!-- Animated Score Ring / Counter -->
+                <div class="score-display-container">
+                    <div class="circular-progress" data-percentage="{{ analysis.match_percentage|default:75 }}">
+                        <span class="progress-value">0%</span>
+                    </div>
+                    <div class="score-meta">
+                        <h3>Overall Profile Match</h3>
+                        <p>{{ analysis.summary }}</p>
+                    </div>
+                </div>
+
+                <!-- Gamified Skill Tags (Matched vs Missing) -->
+                <div class="skills-grid-tags">
+                    <div class="tag-group matched">
+                        <h4>✅ Matched Skills</h4>
+                        <div class="tags-wrapper">
+                            {% for skill in analysis.matched_skills %}
+                                <span class="skill-tag match-yes">{{ skill }}</span>
+                            {% empty %}
+                                <span class="text-secondary">No direct matches found.</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="tag-group missing">
+                        <h4>⚠️ Recommended to Learn / Missing</h4>
+                        <div class="tags-wrapper">
+                            {% for skill in analysis.missing_skills %}
+                                <span class="skill-tag match-no">{{ skill }}</span>
+                            {% empty %}
+                                <span class="text-secondary">None! You have all core requirements.</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Job Analysis & Learning Path Text Section -->
+            <section class="analysis-section" style="margin-top: 1.5rem;">
+                <h2 class="section-title">📊 Detailed Job Analysis & Learning Path</h2>
+                <div class="analysis-box pre-wrap">
+                    {% if analysis.detailed_analysis %}
+                        {{ analysis.detailed_analysis }}
+                    {% else %}
+                        No detailed analysis provided.
+                    {% endif %}
+                </div>
+            </section>
+        {% endif %}
+        <!-- 🚀 EKHANE SHESH -->
+
+        <!-- Navigation Footer -->
+        <footer class="card-footer">
+            <a href="{% url 'application_detail' application.pk %}" class="btn-back">
+                ← Back to Application
+            </a>
+        </footer>
+    </div>
+
+    <!-- JavaScript Animation & Dynamic Counter Logic -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const circularProgress = document.querySelector(".circular-progress");
+            const progressValue = document.querySelector(".progress-value");
+            
+            if (circularProgress && progressValue) {
+                let targetPercentage = parseInt(circularProgress.getAttribute("data-percentage")) || 75;
+                let startValue = 0;
+                let speed = 20;
+
+                let progressAnimation = setInterval(() => {
+                    startValue++;
+                    progressValue.textContent = startValue + "%";
+                    circularProgress.style.background = `conic-gradient(var(--primary-color) ${startValue * 3.6}deg, #e5e7eb 0deg)`;
+
+                    if (startValue >= targetPercentage) {
+                        clearInterval(progressAnimation);
+                    }
+                }, speed);
+            }
+        });
+    </script>
+
 </body>
 </html>

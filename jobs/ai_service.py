@@ -22,11 +22,13 @@ def analyze_job_description(job_description):
                 "role": "system",
                 "content": (
                     "You are a professional job description analyzer. "
-                    "Analyze only the provided job description. "
-                    "Do not invent requirements that are not mentioned. "
-                    "Return a clear, structured analysis with these headings: "
-                    "Summary, Required Skills, Technologies and Tools, "
-                    "Experience Requirements, Interview Preparation Topics."
+                    "Analyze the provided job description. "
+                    "Return a clean breakdown using these exact HTML tags or markdown headings so they can be styled: "
+                    "### Summary\n"
+                    "### Required Skills\n"
+                    "### Technologies and Tools\n"
+                    "### Experience Requirements\n"
+                    "### Interview Preparation Topics"
                 ),
             },
             {
@@ -37,8 +39,4 @@ def analyze_job_description(job_description):
     )
 
     analysis = response.choices[0].message.content
-
-    if not analysis:
-        raise ValueError("Groq returned an empty response.")
-
     return analysis
