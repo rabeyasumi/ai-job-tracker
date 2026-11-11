@@ -7,16 +7,37 @@
 }
 
 :root {
-    --primary-color: #4f46e5;
-    --primary-hover: #4338ca;
-    --bg-color: #f3f4f6;
+    /* Keeping your original variable names with Online Judge themes */
+    --primary-color: #2f5bea;
+    --primary-hover: #1d4ed8;
+    
+    --bg-color: #477ea3; /* Fallback */
+    --bg-gradient: linear-gradient(135deg, #477ea3 0%, #9fa5ad 50%, #092534 100%);
+    --bg-gradient-alt: linear-gradient(135deg, #EC4899 0%, #F9A8D4 50%, #831843 100%);
+    
     --card-bg: #ffffff;
-    --text-primary: #1f2937;
-    --text-secondary: #4b5563;
-    --border-color: #e5e7eb;
+    --analysis-bg: #f8fafc;
+    
+    --text-primary: #1d2433;
+    --text-secondary: #6b7385;
+    
+    --border-color: #e1e5ee;
+    
     --error-bg: #fee2e2;
     --error-text: #991b1b;
-    --analysis-bg: #f8fafc;
+    
+    /* Additional utility colors */
+    --ok: #1a8f4a;
+    --bad: #d23b3b;
+    --warn: #c27a0a;
+}
+
+/* Background gradient apply */
+body.bg-container {
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text-primary);
 }
 
 body.bg-container {
