@@ -1,11 +1,10 @@
 
 import os
 from pathlib import Path
+import dj_database_url
 
 from dotenv import load_dotenv
-
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 load_dotenv(BASE_DIR / '.env')
 
 GROQ_API_KEY = os.getenv('GROQ_API_KEY', '')
@@ -78,23 +77,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
-
+DATABASE_URL=os.getenv('DATABASE_URL');
 
 DB_NAME = os.getenv('DB_NAME')
 
 if DB_NAME:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': DB_NAME,
-            'USER': os.getenv('DB_USER'),
-            'PASSWORD': os.getenv('DB_PASSWORD'),
-            'HOST': os.getenv('DB_HOST'),
-            'PORT': os.getenv('DB_PORT', '5432'),
-            'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', '60')),
-            'OPTIONS': {'sslmode': 'require'},
-        }
-    }
+    'default': dj_database_url.config(
+        env='DATABASE_URL',
+        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
+        conn_max_age=int(os.getenv('DB_CONN_MAX_AGE', '60')),
+        conn_health_checks=True,
+        ssl_require=True,
+    )
+}
 else:
     DATABASES = {
         'default': {
