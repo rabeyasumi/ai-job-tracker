@@ -77,20 +77,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
-DATABASE_URL=os.getenv('DATABASE_URL');
+DATABASE_URL = os.getenv('DATABASE_URL')
 
-DB_NAME = os.getenv('DB_NAME')
-
-if DB_NAME:
+if DATABASE_URL:
     DATABASES = {
-    'default': dj_database_url.config(
-        env='DATABASE_URL',
-        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
-        conn_max_age=int(os.getenv('DB_CONN_MAX_AGE', '60')),
-        conn_health_checks=True,
-        ssl_require=True,
-    )
-}
+        'default': dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=int(os.getenv('DB_CONN_MAX_AGE', '60')),
+            conn_health_checks=True,
+        )
+    }
 else:
     DATABASES = {
         'default': {
